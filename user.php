@@ -26,9 +26,7 @@
 			}	
 		}
 		
-		/*$u1 = new user('Titi', 'Camara');
-		echo $u1->getFulName();
-	    */
+		
 		$options = [
 		'firstName' => 'Antonio',
 		'lastName' => 'Conte'
