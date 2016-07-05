@@ -6,11 +6,36 @@
 		public $firstName;
 		public $lastName;
 		public $email;
-
+		private static $database;
 		public function __construct()
 		{
 				$connexion = new Database();
 				$this->db = $connexion->connexion();
+		}
+
+		//selection by id
+		//méthode statique = méthode de classe
+		//invoqué par le ::
+		public function findById($id)
+		{		
+				//variante si contexte statique
+			    $connexion = new Database();
+				self::$database = $connexion->connexion();
+				$sth = self::$database->query("SELECT * FROM User WHERE id=".$id);
+				$sth->execute();
+				$result = $sth->fetch(PDO::FETCH_OBJ);
+
+				
+				if(!$result) {
+					return false;
+				}
+				else {
+					//instanciation d'objet + ajout(hydratation) 
+					$user = new User();
+					$user->id = $result->id;
+					return $user;
+				}		
+				
 		}
 
 		public function findAll()
@@ -45,9 +70,10 @@
 			
 		}
 
-		public function delete($id)
+		public function delete()
 		{
-			
+				$sth = $this->db->query("DELETE FROM User WHERE id=".$this->id);
+				$sth->execute();
 		}
 
 		public function getFullName()
