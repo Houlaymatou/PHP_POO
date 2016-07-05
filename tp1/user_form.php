@@ -1,32 +1,44 @@
 <?php
-require_once('boot.php');
-require_once ("style.php");
+    require_once('boot.php');
+    require_once ("style.php");
 
-if(isset($_GET['id'])){
-  //formulaire mode edit
- $user = User::findById($_GET['id']);
+    if(isset($_GET['id'])){
+      $mode = 'update';
+      //formulaire mode edit
+     $user = User::findById($_GET['id']);
+     //var_dump($user);
+    }
+    else {
+      $mode = 'insert';
+      //crée un formulaire vide en mode insert pour eviter "notice undefined"
+      $user = new User();
+    }
+
+    if(isset($_POST['submit'])){
+      //formulaire envoyé
+      //utiliser la classe User
+      //Pour inserer en DB les données postées
+
+      //instanciatio de l'objet vide
+     
+      $user = new User();
+      //alimentation de l'objet vide
+      $user->id = $_POST['id'];
+      $user->firstName = $_POST['firstName'];
+      $user->lastName = $_POST['lastName'];
+      $user->email = $_POST['email'];
+  //déterminer le mode 
  var_dump($user);
-}
-else {
-  //crée un formulaire vide en mode insert pour eviter "notice undefined"
-  $user = new User();
-}
+      if(isset($_POST['id'])){
+        $user->update();
+      }
+      else {
+        $user->insert();
+      }
+        
+    
 
-if(isset($_POST['submit'])){
-  //formulaire envoyé
-  //utiliser la classe User
-  //Pour inserer en DB les données postées
-
-  //instanciatio de l'objet vide
-  $user = new User();
-  //alimentation de l'objet vide
-  $user->firstName = $_POST['firstName'];
-  $user->lastName = $_POST['lastName'];
-  $user->email = $_POST['email'];
-
-  $user->insert();
-
-}
+    }
 ?>
 <div class="container">
     <div class="well">
@@ -45,7 +57,12 @@ if(isset($_POST['submit'])){
               <label for="email">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="<?= $user->email?>">
             </div>
-            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+            <?php
+                if($mode == 'update') {
+                  echo '<input type="hidden" name="id" value="'.$user->id.'">';
+                }
+            ?>
+            <input type="submit" class="btn btn-primary" name="submit" value="Submit">
         </form>
     </div>
 </div>

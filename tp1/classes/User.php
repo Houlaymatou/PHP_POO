@@ -73,9 +73,16 @@
 
 		}
 
-		public function update($id)
+		public function update()
 		{
-			
+			$sth = $this->db->prepare("UPDATE User SET firstName=:firstName, lastName=:lastName, email=:email WHERE id=:id");
+			$sth->bindValue(':id', $this->id);
+			$sth->bindValue(':firstName', $this->firstName);
+			$sth->bindValue(':lastName', $this->lastName);
+			$sth->bindValue(':email', $this->email);
+			$sth->execute();
+
+
 		}
 
 		public function delete()
