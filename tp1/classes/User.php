@@ -21,10 +21,9 @@
 				//variante si contexte statique
 			    $connexion = new Database();
 				self::$database = $connexion->connexion();
-				$sth = self::$database->query("SELECT * FROM User WHERE id=".$id);
+				$sth = self::$database->query("SELECT * FROM User WHERE id=".$id );
 				$sth->execute();
 				$result = $sth->fetch(PDO::FETCH_OBJ);
-
 				
 				if(!$result) {
 					return false;
@@ -33,6 +32,10 @@
 					//instanciation d'objet + ajout(hydratation) 
 					$user = new User();
 					$user->id = $result->id;
+					$user->firstName = $result->firstName;
+					$user->lastName = $result->lastName;
+					$user->email = $result->email;
+
 					return $user;
 				}		
 				
@@ -57,11 +60,16 @@
 					$user->email = $result->email;
 					$users[] = $user;
 				}
-				return $users;
+				return $users; //retourne un tableau
 			
 		}
 		public function insert()
 		{
+			$sth = $this->db->prepare("INSERT INTO User (firstName, lastName, email) VALUES (:firstName, :lastName, :email)");
+			$sth->bindValue(':firstName', $this->firstName);
+			$sth->bindValue(':lastName', $this->lastName);
+			$sth->bindValue(':email', $this->email);
+			$sth->execute();
 
 		}
 
