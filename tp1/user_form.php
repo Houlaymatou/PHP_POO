@@ -25,17 +25,12 @@
     $user->lastName = $_POST['lastName'];
     $user->email = $_POST['email'];
     // déterminer au submit si on est en mode update ou en mode insert
-    if (isset($_POST['id'])) {
-      //echo 'mode update';
-      $user->id = $_POST['id'];
-      $user->update();
-      
+    
 
-    } else {
-      //echo 'mode insert';
-      $user->insert();
-      
+    if(isset($_POST['id'])){
+      $user->id = $_POST['id'];
     }
+    $user->save();
     redirect ('index.php');
   }
 ?>

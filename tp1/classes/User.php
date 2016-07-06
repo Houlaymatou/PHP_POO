@@ -95,6 +95,21 @@
 
 		}
 
+		public function save()
+		{
+			/*if (isset($this->id))
+			{
+				$this->update();
+			}
+			else {
+				$this->insert();
+			}*/
+			//notation ternaire
+							//expression true     false
+			isset($this->id)?$this->update() : $this->insert();
+
+		}
+
 		public function delete()
 		{
 				$sth = $this->db->query("DELETE FROM User WHERE id=".$this->id);
