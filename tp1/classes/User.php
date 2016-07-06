@@ -7,10 +7,20 @@
 		public $lastName;
 		public $email;
 		private static $database;
+
 		public function __construct()
 		{
 				$connexion = new Database();
 				$this->db = $connexion->connexion();
+		}
+
+		public static function countAll() 
+		{	$connexion = new Database();
+			self::$database = $connexion->connexion();
+			$sth = self::$database->query('SELECT COUNT(*) FROM User');
+			$sth->execute();
+			$result = $sth->fetch(PDO::FETCH_NUM);//renvoie un tableau
+			return $result[0];
 		}
 
 		//selection by id
@@ -75,7 +85,7 @@
 
 		public function update()
 		{
-			$sth = $this->db->prepare("UPDATE User SET firstName=:firstName, lastName=:lastName, email=:email WHERE id=:id");
+			$sth = $this->db->prepare("UPDATE User SET id=:id, firstName=:firstName, lastName=:lastName, email=:email WHERE id=:id");
 			$sth->bindValue(':id', $this->id);
 			$sth->bindValue(':firstName', $this->firstName);
 			$sth->bindValue(':lastName', $this->lastName);
@@ -95,5 +105,7 @@
 		{
 				return $this->firstName . ' ' . $this->lastName;
 		}
+
+		
 }
 ?>

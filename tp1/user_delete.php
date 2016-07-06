@@ -12,6 +12,7 @@
 		else{
 
 			$user->delete();
+			redirect('index.php');
 		}
 	}
 	else {

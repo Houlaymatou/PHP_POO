@@ -1,44 +1,43 @@
 <?php
-    require_once('boot.php');
-    require_once ("style.php");
-
-    if(isset($_GET['id'])){
-      $mode = 'update';
-      //formulaire mode edit
-     $user = User::findById($_GET['id']);
-     //var_dump($user);
-    }
-    else {
-      $mode = 'insert';
-      //crée un formulaire vide en mode insert pour eviter "notice undefined"
-      $user = new User();
-    }
-
-    if(isset($_POST['submit'])){
-      //formulaire envoyé
-      //utiliser la classe User
-      //Pour inserer en DB les données postées
-
-      //instanciatio de l'objet vide
-     
-      $user = new User();
-      //alimentation de l'objet vide
-      $user->id = $_POST['id'];
-      $user->firstName = $_POST['firstName'];
-      $user->lastName = $_POST['lastName'];
-      $user->email = $_POST['email'];
-  //déterminer le mode 
- var_dump($user);
-      if(isset($_POST['id'])){
-        $user->update();
-      }
-      else {
-        $user->insert();
-      }
-        
     
+  require_once ("style.php");
 
+  require_once('boot.php');
+  if (isset($_GET['id'])) {
+    $mode = 'update';
+    // formulaire en mode update
+    $user = User::findById($_GET['id']);
+    //var_dump($user);
+  } else {
+    $mode = 'insert';
+    // formulaire en mode insert
+    // créer un user vide pour éviter "notice: undefined variable/property" (attributs value des input du formulaire)
+    $user = new User();
+  }
+  if (isset($_POST['submit'])) {
+    // formulaire envoyé
+    // utiliser la classe User
+    // pour insérer en DB les données postées
+    // instanciation d'un objet vide
+    $user = new User();
+    // hydratation de l'objet
+    $user->firstName = $_POST['firstName'];
+    $user->lastName = $_POST['lastName'];
+    $user->email = $_POST['email'];
+    // déterminer au submit si on est en mode update ou en mode insert
+    if (isset($_POST['id'])) {
+      //echo 'mode update';
+      $user->id = $_POST['id'];
+      $user->update();
+      
+
+    } else {
+      //echo 'mode insert';
+      $user->insert();
+      
     }
+    redirect ('index.php');
+  }
 ?>
 <div class="container">
     <div class="well">

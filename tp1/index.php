@@ -7,7 +7,10 @@
 	echo '<div class="container">'; 
 	echo '<div class="well">';
 	echo '<h1>Liste des utilisateurs</h1>';
+	echo '<p> Nombre d\'utilisateur '. User::countAll() . '</p>';
 	echo '<a class="btn btn-warning" href="user_form.php"> Ajouter un utilisateur</a>';
+
+	//Afficher le nombre d'utilisateurs
 
 	//Afficher la liste
 	$user = new User();
