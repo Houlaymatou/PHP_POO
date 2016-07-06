@@ -16,8 +16,9 @@
 		}
 
 		public function htmlFormat($property)
-		{
-			return $this->$property;
+		{//$this->$property est résolue dynamiquement dans le contexte de l'objet qui appelle la méthode
+		//$this->$property devient dynamiquement $a->title
+			return '<strong>'. $this->$property . '</strong>';
 		}
 	}
 
@@ -29,6 +30,7 @@
 	class Article extends Document
 	{
 		public $issueYear = 2016;
+		public $title = 'Voyage au bout de la nuit';
 	}
 	$br = '<br>';
 	$b = new Book();
@@ -36,4 +38,6 @@
 	echo $b->textFormat('texte');
 	echo $br;
 	echo $a->htmlFormat('issueYear');
+	echo $br;
+	echo $a->htmlFormat('title');//l'objet retourne une version formatée de sa propriété title
 ?>
