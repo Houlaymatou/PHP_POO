@@ -52,15 +52,18 @@
 	class FileWriter extends Writer
 	{	
 		protected $file;
-		public  function __construct($file)
+		public  function __construct($formater, $file)
 		{
 			$this->file = $file;//hydratation à l'instanciation
+			$this->formater = $formater;
 		}
+
 		public  function write($text)
 		{
 			//Ecrit sur le disque en php
+
 			$f = fopen($this->file, 'w');	//création du fichier sur le disque
-			fwrite($f, $text);
+			fwrite($f, $this->formater->format($text));
 			fclose($f);
 		}	
 	}
@@ -70,14 +73,15 @@
 		protected $db;//type PDO
 		public  function __construct($formater, $db)
 		{
-			//$this->formater =$formater;
+			$this->formater =$formater;//issue de la classe parente
 			$this->db = $db;
 		}
+
 		public  function write($text)
 		{
 			//Ecrit dans la Data Base
 			$query = $this->db->prepare('INSERT INTO messages(text)  VALUES (:text)');
-			$query->bindValue(':text', $text);
+			$query->bindValue(':text', $this->formater->format($text));
 			$query->execute();
 		}	
 	}
@@ -85,6 +89,10 @@
 	require '../database.php';
 	$db = new Database();
 	$pdo =$db->connexion();
-	$dbw = new DBWriter(null, $pdo);
+	$dbw = new DBWriter(new TextFormater, $pdo);//instancie la classe appelé
+	echo('<pre>');
+	//var_dump($dbw);
 	$dbw->write('hye');
+	$fw = new FileWriter(new HTMLFormater, 'log.txt');
+	$fw->write('bisou');
 ?>
